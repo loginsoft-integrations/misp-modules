@@ -102,7 +102,7 @@ class FarsightDnsdbParser():
 
     def parse_passivedns_results(self, query_response):
         event = json.loads(self.misp_event.to_json())
-        event_distribution = event['distribution']
+        event_distribution = event.distribution
         for query_type, results in query_response.items():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
             for result in results:
