@@ -6,6 +6,7 @@ from pymisp import MISPEvent, MISPObject
 
 misperrors = {'error': 'Error'}
 Farsight_Shared_Group = "88a55e33-9d40-4af0-8985-d91863d42b4b"
+fs_distribution = '0' 
 standard_query_input = [
     'hostname',
     'domain',
@@ -102,7 +103,6 @@ class FarsightDnsdbParser():
     def parse_passivedns_results(self, query_response):
         for query_type, results in query_response.items():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
-            fs_distribution = '0' 
             event_distribution = self.misp_event.distribution
             print("venkat")  
             for result in results:
