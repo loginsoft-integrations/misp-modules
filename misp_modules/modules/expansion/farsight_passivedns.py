@@ -104,10 +104,7 @@ class FarsightDnsdbParser():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
             fs_distribution = '0' 
             event_distribution = self.misp_event.distribution
-            if event_distribution == "4":
-                sharing_uuid = self.misp_event.SharingGroup.uuid
-                if sharing_uuid == Farsight_Shared_Group:
-                    fs_distribution = '5'    
+            print("venkat")  
             for result in results:
                 passivedns_object = MISPObject('passive-dns')
                 passivedns_object.distribution = fs_distribution
