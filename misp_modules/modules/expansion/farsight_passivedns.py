@@ -103,8 +103,6 @@ class FarsightDnsdbParser():
     def parse_passivedns_results(self, query_response):
         for query_type, results in query_response.items():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
-            event_distribution = self.misp_event.distribution
-            print("venkat")  
             for result in results:
                 passivedns_object = MISPObject('passive-dns')
                 passivedns_object.distribution = fs_distribution
