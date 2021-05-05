@@ -5,6 +5,7 @@ from datetime import datetime
 from pymisp import MISPEvent, MISPObject
 
 misperrors = {'error': 'Error'}
+Farsight_Shared_Group = "88a55e33-9d40-4af0-8985-d91863d42b4b"
 standard_query_input = [
     'hostname',
     'domain',
@@ -101,9 +102,15 @@ class FarsightDnsdbParser():
     def parse_passivedns_results(self, query_response):
         for query_type, results in query_response.items():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
+            fs_distribution = '0' 
+            event_distribution = self.misp_event.distribution
+            if event_distribution == "4":
+                sharing_uuid = self.misp_event.SharingGroup.uuid
+                if sharing_uuid == Farsight_Shared_Group:
+                    fs_distribution = '5'    
             for result in results:
                 passivedns_object = MISPObject('passive-dns')
-                passivedns_object.distribution = '3'
+                passivedns_object.distribution = fs_distribution
                 if result.get('rdata') and isinstance(result['rdata'], list):
                     for rdata in result.pop('rdata'):
                         passivedns_object.add_attribute(**self._parse_attribute(comment, 'rdata', rdata))
@@ -122,7 +129,7 @@ class FarsightDnsdbParser():
         return {'results': results}
 
     def _parse_attribute(self, comment, feature, value):
-        attribute = {'value': value, 'comment': comment, 'distribution': '3'}
+        attribute = {'value': value, 'comment': comment, 'distribution': fs_distribution}
         attribute.update(self.passivedns_mapping[feature])
         return attribute
 
