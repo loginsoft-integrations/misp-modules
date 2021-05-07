@@ -1,5 +1,6 @@
 import dnsdb2
 import json
+import logging
 from . import check_input_attribute, standard_error_message
 from datetime import datetime
 from pymisp import MISPEvent, MISPObject, PyMISP
