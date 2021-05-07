@@ -5,7 +5,7 @@ from . import check_input_attribute, standard_error_message
 from datetime import datetime
 from pymisp import MISPEvent, MISPObject, PyMISP
 
-misp_url = 'https://18.116.32.112/'
+misp_url = 'https://18.116.32.112'
 misp_key = 'uU7TIbeQlAquNHkMfcZyFAkZHoY3hi0mexahbzcR' # The MISP auth key can be found on the MISP web interface under the automation section
 farsight_sharing_group = '88a55e33-9d40-4af0-8985-d91863d42b4b'
 logging.basicConfig(filename = "/home/ubuntu/debug.txt", filemode = 'a', format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt = '%Y-%m-%d %H:%M:%S')
