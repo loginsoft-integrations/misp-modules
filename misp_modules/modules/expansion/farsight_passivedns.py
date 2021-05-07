@@ -113,6 +113,11 @@ class FarsightDnsdbParser():
         event_id = event['uuid']
         log.debug("Event Id...")
         log.debug(event_id)
+        misp = PyMISP(misp_url, misp_key, False)
+        log.debug("PyMISP..............")
+        log.debug(misp)
+        event_details = misp.get(event_id)
+        log.debug(event_details)
         for query_type, results in query_response.items():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
             for result in results:
