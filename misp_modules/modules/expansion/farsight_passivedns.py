@@ -3,7 +3,7 @@ import json
 import logging
 from . import check_input_attribute, standard_error_message
 from datetime import datetime
-from pymisp import MISPEvent, MISPObject, PyMISP
+from pymisp import MISPEvent, MISPObject, ExpandedPyMISP
 
 
 farsight_sharing_group = '88a55e33-9d40-4af0-8985-d91863d42b4b'
@@ -116,9 +116,10 @@ class FarsightDnsdbParser():
         from pymisp import PyMISP
         misp_url = 'https://18.116.32.112'
         misp_key = 'uU7TIbeQlAquNHkMfcZyFAkZHoY3hi0mexahbzcR'
-        misp = PyMISP(misp_url, misp_key, False)
-        log.debug(misp)
-        event_details = misp.get(event_id)
+        misp_client = ExpandedPyMISP(misp_url, misp_key, False)
+        log.debug("ExpandedPyMISP..............")
+        log.debug(misp_client)
+        event_details = misp_client.get(event_id)
         log.debug(event_details)
         for query_type, results in query_response.items():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
