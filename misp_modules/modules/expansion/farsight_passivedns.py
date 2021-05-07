@@ -112,8 +112,11 @@ class FarsightDnsdbParser():
     def parse_passivedns_results(self, query_response):
         event = json.loads(self.misp_event.to_json())
         event_id = event['uuid']
+        log.debug("Event Id...")
         log.debug(event_id)
         misp = PyMISP(misp_url, misp_key, misp_verifycert)
+        log.debug("PyMISP..............")
+        log.debug(misp)
         event_details = misp.get(event_id)
         log.debug(event_details)
         for query_type, results in query_response.items():
