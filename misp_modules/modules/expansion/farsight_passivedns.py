@@ -113,16 +113,11 @@ class FarsightDnsdbParser():
         event_id = event['uuid']
         log.debug("Event Id...")
         log.debug(event_id)
-        misp = PyMISP(misp_url, misp_key, True)
-        log.debug("PyMISP..............")
-        log.debug(misp)
-        event_details = misp.get(event_id)
-        log.debug(event_details)
         for query_type, results in query_response.items():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
             for result in results:
                 passivedns_object = MISPObject('passive-dns')
-                passivedns_object.distribution = dis
+                passivedns_object.distribution = fs_distribution
                 if result.get('rdata') and isinstance(result['rdata'], list):
                     for rdata in result.pop('rdata'):
                         passivedns_object.add_attribute(**self._parse_attribute(comment, 'rdata', rdata))
