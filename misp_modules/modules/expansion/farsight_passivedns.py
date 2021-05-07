@@ -113,7 +113,7 @@ class FarsightDnsdbParser():
         event_id = event['uuid']
         log.debug("Event Id...")
         log.debug(event_id)
-        misp = PyMISP(misp_url, misp_key)
+        misp = PyMISP(misp_url, misp_key, True)
         log.debug("PyMISP..............")
         log.debug(misp)
         event_details = misp.get(event_id)
