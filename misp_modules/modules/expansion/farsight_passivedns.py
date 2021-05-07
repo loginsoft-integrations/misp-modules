@@ -1,7 +1,6 @@
 import dnsdb2
 import json
 import logging
-from os import system
 from . import check_input_attribute, standard_error_message
 from datetime import datetime
 from pymisp import MISPEvent, MISPObject, PyMISP
@@ -12,7 +11,6 @@ logging.basicConfig(filename = "/home/ubuntu/debug.txt", filemode = 'a', format 
 log = logging.getLogger('Testtt')
 log.setLevel(logging.DEBUG)
 log.debug("Started Debugging...")
-log.debug(system("ping https://18.116.32.112/"))
 fs_distribution = '0' 
 
 misperrors = {'error': 'Error'}
