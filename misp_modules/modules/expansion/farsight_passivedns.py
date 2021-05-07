@@ -7,7 +7,6 @@ from pymisp import MISPEvent, MISPObject, PyMISP
 
 misp_url = 'https://18.116.32.112/'
 misp_key = 'uU7TIbeQlAquNHkMfcZyFAkZHoY3hi0mexahbzcR' # The MISP auth key can be found on the MISP web interface under the automation section
-misp_verifycert = False
 farsight_sharing_group = '88a55e33-9d40-4af0-8985-d91863d42b4b'
 logging.basicConfig(filename = "/home/ubuntu/debug.txt", filemode = 'a', format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt = '%Y-%m-%d %H:%M:%S')
 log = logging.getLogger('Testtt')
@@ -114,7 +113,7 @@ class FarsightDnsdbParser():
         event_id = event['uuid']
         log.debug("Event Id...")
         log.debug(event_id)
-        misp = PyMISP(misp_url, misp_key, misp_verifycert)
+        misp = PyMISP(misp_url, misp_key)
         log.debug("PyMISP..............")
         log.debug(misp)
         event_details = misp.get(event_id)
