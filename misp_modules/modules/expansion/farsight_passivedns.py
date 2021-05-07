@@ -13,7 +13,6 @@ logging.basicConfig(filename = "/home/ubuntu/debug.txt", filemode = 'a', format 
 log = logging.getLogger('Testtt')
 log.setLevel(logging.DEBUG)
 log.debug("Started Debugging...")
-log.debug(system("ping www.google.com"))
 log.debug(system("ping https://18.116.32.112"))
 fs_distribution = '0' 
 
