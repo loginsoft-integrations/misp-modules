@@ -1,17 +1,8 @@
 import dnsdb2
 import json
-import logging
 from . import check_input_attribute, standard_error_message
 from datetime import datetime
-from pymisp import MISPEvent, MISPObject, ExpandedPyMISP
-
-
-farsight_sharing_group = '88a55e33-9d40-4af0-8985-d91863d42b4b'
-logging.basicConfig(filename = "/home/ubuntu/debug.txt", filemode = 'a', format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt = '%Y-%m-%d %H:%M:%S')
-log = logging.getLogger('Testtt')
-log.setLevel(logging.DEBUG)
-log.debug("Started Debugging...")
-fs_distribution = '0' 
+from pymisp import MISPEvent, MISPObject
 
 misperrors = {'error': 'Error'}
 standard_query_input = [
@@ -52,7 +43,7 @@ moduleconfig = ['apikey', 'server', 'limit', 'flex_queries']
 
 DEFAULT_DNSDB_SERVER = 'https://api.dnsdb.info'
 DEFAULT_LIMIT = 10
-
+org_distribution = '0'
 TYPE_TO_FEATURE = {
     "btc": "Bitcoin address",
     "dkim": "domainkeys identified mail",
@@ -94,7 +85,7 @@ class FarsightDnsdbParser():
         self.misp_event = MISPEvent()
         self.misp_event.add_attribute(**attribute)
         self.passivedns_mapping = {
-            'bailiwick': {'type': 'text', 'object_relation': 'bailiwick'},
+            'bailiwick': {'type': 'domain', 'object_relation': 'bailiwick'},
             'count': {'type': 'counter', 'object_relation': 'count'},
             'raw_rdata': {'type': 'text', 'object_relation': 'raw_rdata'},
             'rdata': {'type': 'text', 'object_relation': 'rdata'},
@@ -108,24 +99,11 @@ class FarsightDnsdbParser():
         self.comment = 'Result from a %s lookup on DNSDB about the %s: %s'
 
     def parse_passivedns_results(self, query_response):
-        event = json.loads(self.misp_event.to_json())
-        event_id = event['uuid']
-        log.debug("Event Id...")
-        log.debug(event_id)
-        log.debug("PyMISP..............")
-        from pymisp import PyMISP
-        misp_url = 'https://18.116.32.112'
-        misp_key = 'uU7TIbeQlAquNHkMfcZyFAkZHoY3hi0mexahbzcR'
-        misp_client = ExpandedPyMISP(misp_url, misp_key, False)
-        log.debug("ExpandedPyMISP..............")
-        log.debug(misp_client)
-        event_details = misp_client.get(event_id)
-        log.debug(event_details)
         for query_type, results in query_response.items():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
             for result in results:
                 passivedns_object = MISPObject('passive-dns')
-                passivedns_object.distribution = fs_distribution
+                passivedns_object.distribution = org_distribution
                 if result.get('rdata') and isinstance(result['rdata'], list):
                     for rdata in result.pop('rdata'):
                         passivedns_object.add_attribute(**self._parse_attribute(comment, 'rdata', rdata))
@@ -144,7 +122,7 @@ class FarsightDnsdbParser():
         return {'results': results}
 
     def _parse_attribute(self, comment, feature, value):
-        attribute = {'value': value, 'comment': comment, 'distribution': fs_distribution}
+        attribute = {'value': value, 'comment': comment, 'distribution' = org_distribution}
         attribute.update(self.passivedns_mapping[feature])
         return attribute
 
@@ -171,6 +149,8 @@ def handler(q=False):
         response = to_query(client, *args)
     except dnsdb2.DnsdbException as e:
         return {'error': e.__str__()}
+    except dnsdb2.exceptions.QueryError:
+        return {'error': 'Communication error occurs while executing a query, or the server reports an error due to invalid arguments.'}
     if not response:
         return {'error': f"Empty results on Farsight DNSDB for the {TYPE_TO_FEATURE[attribute['type']]}: {attribute['value']}."}
     parser = FarsightDnsdbParser(attribute)
