@@ -122,7 +122,7 @@ class FarsightDnsdbParser():
         return {'results': results}
 
     def _parse_attribute(self, comment, feature, value):
-        attribute = {'value': value, 'comment': comment, 'distribution': '0'}
+        attribute = {'value': value, 'comment': comment, 'distribution': DEFAULT_DISTRIBUTION_SETTING}
         attribute.update(self.passivedns_mapping[feature])
         return attribute
 
