@@ -2,7 +2,7 @@ import dnsdb2
 import json
 from . import check_input_attribute, standard_error_message
 from datetime import datetime
-from pymisp import MISPEvent, MISPObject
+from pymisp import MISPEvent, MISPObject, Distribution
 
 
 misperrors = {'error': 'Error'}
@@ -103,7 +103,7 @@ class FarsightDnsdbParser():
             comment = self.comment % (query_type, TYPE_TO_FEATURE[self.attribute['type']], self.attribute['value'])
             for result in results:
                 passivedns_object = MISPObject('passive-dns')
-                passivedns_object.distribution = '0'
+                passivedns_object.distribution = Distribution.your_organisation_only.value
                 if result.get('rdata') and isinstance(result['rdata'], list):
                     for rdata in result.pop('rdata'):
                         passivedns_object.add_attribute(**self._parse_attribute(comment, 'rdata', rdata))
@@ -122,7 +122,7 @@ class FarsightDnsdbParser():
         return {'results': results}
 
     def _parse_attribute(self, comment, feature, value):
-        attribute = {'value': value, 'comment': comment, 'distribution': '0'}
+        attribute = {'value': value, 'comment': comment, 'distribution': Distribution.your_organisation_only.value}
         attribute.update(self.passivedns_mapping[feature])
         return attribute
 
