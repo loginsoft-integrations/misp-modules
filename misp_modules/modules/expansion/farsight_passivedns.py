@@ -43,7 +43,7 @@ moduleconfig = ['apikey', 'server', 'limit', 'flex_queries']
 
 DEFAULT_DNSDB_SERVER = 'https://api.dnsdb.info'
 DEFAULT_LIMIT = 10
-DEFAULT_DISTRIBUTION_SETTING = your_organisation_only
+DEFAULT_DISTRIBUTION_SETTING = Distribution.your_organisation_only
 TYPE_TO_FEATURE = {
     "btc": "Bitcoin address",
     "dkim": "domainkeys identified mail",
